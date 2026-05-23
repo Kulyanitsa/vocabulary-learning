@@ -445,3 +445,32 @@ body.dark .stat-item {
   margin-top: 1rem;
 }
 .icon { display: inline-block; vertical-align: middle; }
+
+.stat-card-clickable {
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.stat-card-clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+#word-list-overlay.dark-modal > div {
+  background: #2c2c2e;
+}
+#word-list-overlay.dark-modal #wl-header {
+  border-color: #3a3a3c;
+}
+#word-list-overlay.dark-modal thead tr {
+  background: #1c1c1e;
+}
+#word-list-overlay.dark-modal td {
+  border-color: #3a3a3c;
+  color: #f5f5f7;
+}
+#word-list-overlay.dark-modal th {
+  color: #86868b;
+}
+#word-list-overlay.dark-modal tr:hover td {
+  background: #3a3a3c;
+}

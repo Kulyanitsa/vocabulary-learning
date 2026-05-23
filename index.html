@@ -22,15 +22,15 @@
   </div>
 
   <div class="stats-grid">
-    <div class="stat-card">
+    <div class="stat-card stat-card-clickable" onclick="openWordList('all')">
       <p class="stat-label">Всего</p>
       <p class="stat-value" id="total-words">—</p>
     </div>
-    <div class="stat-card">
+    <div class="stat-card stat-card-clickable" onclick="openWordList('изучается')">
       <p class="stat-label">В учёбе</p>
       <p class="stat-value" id="learning-words">—</p>
     </div>
-    <div class="stat-card">
+    <div class="stat-card stat-card-clickable" onclick="openWordList('выучено')">
       <p class="stat-label">Выучено</p>
       <p class="stat-value" id="learned-words">—</p>
     </div>
@@ -138,6 +138,29 @@
     <div class="export-buttons">
       <button class="btn-full btn-success" onclick="exportProgress()">💾 Экспорт</button>
       <button class="btn-full btn-secondary" onclick="resetProgress()">🔄 Сбросить</button>
+    </div>
+  </div>
+</div>
+
+<!-- WORD LIST MODAL -->
+<div id="word-list-overlay" onclick="closeWordList()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;padding:1rem;overflow-y:auto">
+  <div onclick="event.stopPropagation()" style="max-width:900px;margin:0 auto;background:white;border-radius:16px;overflow:hidden">
+    <div id="wl-header" style="display:flex;justify-content:space-between;align-items:center;padding:1rem 1.25rem;border-bottom:1px solid #e5e5e7">
+      <span id="wl-title" style="font-size:16px;font-weight:600"></span>
+      <button onclick="closeWordList()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#86868b;line-height:1">×</button>
+    </div>
+    <div style="overflow-x:auto">
+      <table id="wl-table" style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead>
+          <tr style="background:#f5f5f7">
+            <th style="padding:10px 12px;text-align:left;font-weight:600;color:#86868b;text-transform:uppercase;font-size:11px;white-space:nowrap">Слово</th>
+            <th style="padding:10px 12px;text-align:left;font-weight:600;color:#86868b;text-transform:uppercase;font-size:11px;white-space:nowrap">Транскрипция</th>
+            <th style="padding:10px 12px;text-align:left;font-weight:600;color:#86868b;text-transform:uppercase;font-size:11px;white-space:nowrap">Перевод</th>
+            <th style="padding:10px 12px;text-align:left;font-weight:600;color:#86868b;text-transform:uppercase;font-size:11px">Контекст</th>
+          </tr>
+        </thead>
+        <tbody id="wl-body"></tbody>
+      </table>
     </div>
   </div>
 </div>

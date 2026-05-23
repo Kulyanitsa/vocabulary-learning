@@ -291,6 +291,36 @@ function exportProgress() {
   URL.revokeObjectURL(url);
 }
 
+function openWordList(filter) {
+  const titles = { all: 'Все слова', 'изучается': 'В учёбе', 'выучено': 'Выучено' };
+  const list = filter === 'all' ? words : words.filter(w => progress[w].status === filter);
+
+  document.getElementById('wl-title').textContent = `${titles[filter]} — ${list.length} слов`;
+
+  const rows = list.map(w => {
+    const d = vocabData[w];
+    return `<tr style="border-top:1px solid #e5e5e7" onmouseenter="this.querySelectorAll('td').forEach(td=>td.style.background='#f5f5f7')" onmouseleave="this.querySelectorAll('td').forEach(td=>td.style.background='')">
+      <td style="padding:10px 12px;font-weight:600;white-space:nowrap">${w}</td>
+      <td style="padding:10px 12px;color:#86868b;font-family:monospace;white-space:nowrap">${d.ipa}</td>
+      <td style="padding:10px 12px">${d.translation}</td>
+      <td style="padding:10px 12px;color:#86868b;font-style:italic">${d.context || '—'}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('wl-body').innerHTML = rows;
+
+  const overlay = document.getElementById('word-list-overlay');
+  overlay.style.display = 'block';
+  if (document.body.classList.contains('dark')) overlay.classList.add('dark-modal');
+  else overlay.classList.remove('dark-modal');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeWordList() {
+  document.getElementById('word-list-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
 function resetProgress() {
   if (confirm('Точно сбросить весь прогресс?')) {
     initProgress();
