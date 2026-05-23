@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1F4E78">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Vocabulary">
+<title>Vocabulary Learning</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📚%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div>
+      <h1>📚 Vocabulary Learning</h1>
+      <p class="subtitle">Изучение английских слов</p>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">🌙</button>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <p class="stat-label">Всего</p>
+      <p class="stat-value" id="total-words">—</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">В учёбе</p>
+      <p class="stat-value" id="learning-words">—</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Выучено</p>
+      <p class="stat-value" id="learned-words">—</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Прогресс</p>
+      <p class="stat-value" id="progress-percent">—</p>
+    </div>
+  </div>
+
+  <div class="controls-bar">
+    <label>Голос:</label>
+    <select id="voice-select" onchange="onVoiceChange()">
+      <option>Загрузка...</option>
+    </select>
+    <label class="checkbox-label">
+      <input type="checkbox" id="auto-speak" checked>
+      Авто-озвучка
+    </label>
+    <button class="btn btn-primary" onclick="testVoice()">🔊 Тест</button>
+  </div>
+
+  <div class="mode-tabs">
+    <button class="mode-tab active" id="tab-flashcard" onclick="switchMode('flashcard')">📇 Карточки</button>
+    <button class="mode-tab" id="tab-quiz" onclick="switchMode('quiz')">❓ Викторина</button>
+    <button class="mode-tab" id="tab-context" onclick="switchMode('context')">📖 Контекст</button>
+    <button class="mode-tab" id="tab-settings" onclick="switchMode('settings')">📊 Статус</button>
+  </div>
+
+  <!-- FLASHCARD -->
+  <div id="mode-flashcard">
+    <div class="card flashcard" id="flashcard" onclick="flipCard()">
+      <p class="flashcard-label">Слово</p>
+      <div id="front-side">
+        <div class="word-row">
+          <p class="word-text" id="card-word">…</p>
+          <button class="speak-btn" onclick="speakWord(event)">🔊</button>
+        </div>
+        <p class="ipa-text" id="card-ipa" style="text-align:center"></p>
+        <p class="translation-front" id="card-translation-front"></p>
+      </div>
+      <div id="back-side" style="display:none">
+        <p class="word-text-large" id="card-translation-back"></p>
+        <p class="word-small" id="card-word-small"></p>
+      </div>
+      <p class="flip-hint">(нажми, чтобы перевернуть)</p>
+    </div>
+
+    <div class="action-buttons">
+      <button class="action-btn btn-danger" onclick="cardAction('hard')">✕ Сложно</button>
+      <button class="action-btn btn-warning" onclick="cardAction('medium')">— Средне</button>
+      <button class="action-btn btn-success" onclick="cardAction('easy')">✓ Легко</button>
+    </div>
+
+    <div class="context-box">
+      <p class="context-label">Контекст:</p>
+      <p class="context-italic" id="context-text"></p>
+    </div>
+
+    <div class="nav-row">
+      <button class="nav-btn" onclick="prevCard()">←</button>
+      <p class="progress-text" id="progress-text">Загрузка…</p>
+      <button class="nav-btn" onclick="nextCard()">→</button>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="mode-quiz" style="display:none">
+    <div class="card">
+      <p class="stat-label">Правильных</p>
+      <p style="font-size:22px;font-weight:600;margin:0"><span id="quiz-correct">0</span> / <span id="quiz-total">0</span></p>
+    </div>
+    <div class="card">
+      <p class="flashcard-label">Что значит?</p>
+      <p style="font-size:24px;font-weight:600;margin:0 0 1.5rem" id="quiz-word"></p>
+      <div id="quiz-options"></div>
+    </div>
+    <button class="btn-full btn-primary" id="next-quiz-btn" onclick="nextQuiz()" disabled style="opacity:0.5">Далее</button>
+  </div>
+
+  <!-- CONTEXT -->
+  <div id="mode-context" style="display:none">
+    <div class="card">
+      <p class="flashcard-label">Найди пропущенное слово</p>
+      <p style="font-size:15px;line-height:1.6;margin:0 0 1rem" id="context-sentence">...</p>
+      <div class="context-buttons">
+        <button class="context-btn-half btn-primary" onclick="speakContextSentence()">🔊 Озвучить фразу</button>
+        <button class="context-btn-half btn-secondary" onclick="speakContextWord()">🔉 Озвучить слово</button>
+      </div>
+      <input class="input-text" type="text" id="context-answer" placeholder="Введи ответ..." onkeydown="if(event.key==='Enter')checkContextAnswer()">
+      <button class="btn-full btn-primary" onclick="checkContextAnswer()">Проверить</button>
+      <div class="result-box" id="context-result"></div>
+    </div>
+    <button class="btn-full btn-secondary" onclick="nextContext()">Следующее слово</button>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="mode-settings" style="display:none">
+    <div class="card">
+      <h2 style="font-size:16px;margin:0 0 1rem">Статистика по словам</h2>
+      <div class="stats-list" id="words-stats"></div>
+    </div>
+    <div class="export-buttons">
+      <button class="btn-full btn-success" onclick="exportProgress()">💾 Экспорт</button>
+      <button class="btn-full btn-secondary" onclick="resetProgress()">🔄 Сбросить</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
