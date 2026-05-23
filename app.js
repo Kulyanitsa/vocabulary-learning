@@ -95,6 +95,7 @@ function speak(text, rate = 0.85) {
 }
 function testVoice() { speak('Hello, this is a test of pronunciation', 0.9); }
 function speakWord(event) { if(event) event.stopPropagation(); speak(words[currentIndex]); }
+function speakCardContext(event) { if(event) event.stopPropagation(); const t = vocabData[words[currentIndex]].context; if(t) speak(t, 0.9); }
 function speakContextWord() { if(currentContextWord) speak(currentContextWord); }
 function speakContextSentence() { if(currentContextSentence) speak(currentContextSentence, 0.9); }
 function autoSpeakIfEnabled(text, rate = 0.85) {

@@ -85,7 +85,10 @@
     </div>
 
     <div class="context-box">
-      <p class="context-label">Контекст:</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <p class="context-label" style="margin:0">Контекст:</p>
+        <button class="speak-btn" style="width:32px;height:32px;font-size:15px" onclick="speakCardContext(event)">🔊</button>
+      </div>
       <p class="context-italic" id="context-text"></p>
     </div>
 
